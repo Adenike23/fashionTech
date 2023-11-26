@@ -65,7 +65,7 @@ const Navbar = ({uniqueArray}) => {
        </ul>
        <div className='relative'>
         {<BsCart3 className='text-2xl cursor-pointer hover:text-amber-300 md:text-white md:mt-0 md:w-full md:mb-0' onClick={() => navigate('/checkout')}/>}
-        {cartItems && <p className='absolute -translate-x-[50%] left-[53%] -top-[35%] w-[3%] md:-top-3 md:left-7 flex md:h-[70%] md:w-[100%] items-center justify-center rounded-full -z-10 text-sm bg-purple-900'>{cartItems.length}</p>}
+        {cartItems.length > 0 && <p className='absolute -translate-x-[50%] left-[53%] -top-[35%] w-[3%] md:-top-3 md:left-7 flex md:h-[70%] md:w-[100%] items-center justify-center rounded-full -z-10 text-sm bg-purple-900'>{cartItems.length}</p>}
        </div> 
        </div>
        
