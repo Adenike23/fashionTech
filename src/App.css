@@ -3,6 +3,13 @@
     padding: 0;
     box-sizing: border-box;
 }
+
 .logo{
     font-family: 'Dancing Script', cursive;
+}
+.nav{
+    box-shadow: 5px 5px 10px rgb(157, 157, 232);
+}
+.text{
+    font-family: 'Roboto', sans-serif;
 }
