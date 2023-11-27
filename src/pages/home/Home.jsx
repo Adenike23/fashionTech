@@ -98,6 +98,7 @@ const Home = () => {
                     </div>
                </div>
             </div>
+            {loading && <span className="loading loading-spinner loading-lg absolute top-[20%] left-[50%] -translate-x-[50%]"></span>}
             <div className='shadow-md max-w-md pb-5 rounded h-[90%]'>
                 <img src={image3} alt="" className='w-[60%] mx-auto relative -top-7'/>
                <div className='text-center text-black'>
@@ -108,6 +109,7 @@ const Home = () => {
                     </div>
                </div>
             </div>
+            {loading && <span className="loading loading-spinner loading-lg absolute top-[20%] left-[50%] -translate-x-[50%]"></span>}
             <div className='shadow-md max-w-md pb-12 rounded h-[90%]'>
                 <img src={image2} alt="" className='w-[26%] mx-auto relative -top-7 rounded-sm'/>
                <div className='text-center text-black'>

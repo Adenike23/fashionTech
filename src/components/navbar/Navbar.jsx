@@ -18,27 +18,33 @@ const Navbar = ({uniqueArray}) => {
       
        {open ? 
        <div className='gap-[5rem] md:hidden'><ul className='text w-full flex flex-col items-center space-y-7 gap-3 -z-10 md:gap-5 md:flex-row md:z-auto md:space-y-0 md:static md:bg-purple-800 text-white md:min-w-[65%] md:opacity-100 lg:gap-10'>
-        {location.pathname === '/' ? <li onClick={() => navigate('/')} className='hover:text-amber-300 text-amber-400 cursor-pointer'>Home</li>
+        {location.pathname === '/' ? <li onClick={() => {navigate('/') 
+        setOpen(!open)}} className='hover:text-amber-300 text-amber-400 cursor-pointer'>Home</li>
           : <li onClick={() => navigate('/')} className='hover:text-amber-300 cursor-pointer'>Home</li>
           }
         {location.pathname === '/electronics' ? <li onClick={() => navigate('/electronics')} className='hover:text-amber-300 cursor-pointer text-amber-400'>Electronics</li>
-          : <li onClick={() => navigate('/electronics')} className='hover:text-amber-300 cursor-pointer'>Electronics</li>
+          : <li onClick={() => {navigate('/electronics') 
+          setOpen(!open)}} className='hover:text-amber-300 cursor-pointer'>Electronics</li>
         }
         {
           location.pathname === '/jewelery' ? <li onClick={() => navigate('/jewelery')} className='hover:text-amber-300 text-amber-400 cursor-pointer'>Jewelry</li>
-          : <li onClick={() => navigate('/jewelery')} className='hover:text-amber-300 cursor-pointer'>Jewelry</li>
+          : <li onClick={() => {navigate('/jewelery') 
+          setOpen(!open)}} className='hover:text-amber-300 cursor-pointer'>Jewelry</li>
         }
         {
           location.pathname === '/mensClothing' ? <li onClick={() => navigate('/mensClothing')} className='hover:text-amber-300 text-amber-400 cursor-pointer'>Men's clothing</li>
-          : <li onClick={() => navigate('/mensClothing')} className='hover:text-amber-300 cursor-pointer'>Men's clothing</li>
+          : <li onClick={() => {navigate('/mensClothing') 
+          setOpen(!open)}} className='hover:text-amber-300 cursor-pointer'>Men's clothing</li>
         }
         {
           location.pathname === '/womensClothing' ? <li onClick={() => navigate('/womensClothing')} className='hover:text-amber-300 text-amber-400 cursor-pointer'>Women's clothing</li>
-          : <li onClick={() => navigate('/womensClothing')} className='hover:text-amber-300 cursor-pointer'>Women's clothing</li>
+          : <li onClick={() => {navigate('/womensClothing') 
+          setOpen(!open)}} className='hover:text-amber-300 cursor-pointer'>Women's clothing</li>
         }
        </ul>
        <div className='relative'>
-        {<BsCart3 className='mt-5 w-[30%] mx-auto text-2xl cursor-pointer mb-5 hover:text-amber-300 md:text-white md:mt-0 md:w-full md:mb-0' onClick={() => navigate('/checkout')}/>}
+        {<BsCart3 className='mt-5 w-[30%] mx-auto text-2xl cursor-pointer mb-5 hover:text-amber-300 md:text-white md:mt-0 md:w-full md:mb-0' onClick={() => {navigate('/checkout') 
+        setOpen(!open)}}/>}
         {cartItems.length > 0 && <p className='absolute -translate-x-[50%] left-[53%] -top-[35%] w-[3%] md:-top-3 md:left-4 flex md:h-[70%] md:w-[100%] items-center justify-center rounded-full -z-10 text-sm bg-purple-900'>{cartItems.length}</p>}
        </div> 
        </div> : ''}
