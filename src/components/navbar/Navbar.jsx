@@ -3,7 +3,7 @@ import { BsCart3 } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
 
 const Navbar = ({uniqueArray}) => {
-  console.log(uniqueArray);
+  // console.log(uniqueArray);
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
   const cartItems = JSON.parse(localStorage.getItem('cart')) || []
@@ -12,8 +12,8 @@ const Navbar = ({uniqueArray}) => {
     <div className='nav flex flex-col justify-around py-5 fixed top-0 w-[100%] z-10 bg-purple-800 text-white pb-1 md:pb-4 md:flex-row'>
        <div className="flex justify-between mx-5">
           <p className='logo text-2xl text-amber-300'>fashionTech</p> 
-          {open ? <span  onClick={() => setOpen(!open)} className='menu text-3xl text-amber-300 block md:hidden'><i class="ri-close-line"></i></span>
-          : <span onClick={() => setOpen(!open)} className='text-3xl text-amber-300 block md:hidden'><i class="ri-menu-3-line"></i></span>}
+          {open ? <span  onClick={() => setOpen(!open)} className='menu text-3xl text-amber-300 block md:hidden cursor-pointer'><i class="ri-close-line"></i></span>
+          : <span onClick={() => setOpen(!open)} className='text-3xl text-amber-300 block md:hidden cursor-pointer'><i class="ri-menu-3-line"></i></span>}
        </div>
       
        {open ? 
