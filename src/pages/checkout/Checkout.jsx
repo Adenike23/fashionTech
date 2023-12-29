@@ -126,7 +126,7 @@ const Checkout = () => {
             <span>Your order is being processed!</span>
         </div>} */}
       {uniqueArray.length === 0 ? (
-        <div className="absolute top-[45%] left-[50%] -translate-x-[50%]">
+        <div className="absolute top-[35%] left-[50%] -translate-x-[50%]">
           <p className="font-bold text-2xl">
             Your Cart is empty, Go back to shop some items...
           </p>
@@ -138,7 +138,7 @@ const Checkout = () => {
           </button>
         </div>
       ) : (
-        <div className="ps-10">
+        <div className="px-5">
           <p className="text-amber-300 font-bold text-2xl md:pt-[1rem]">
             CHECKOUT
           </p>
@@ -276,7 +276,7 @@ const Checkout = () => {
                           className="rounded-lg hover:scale-105 duration-1000 cursor-pointer w-[40%] md:w-[20%]"
                         />
                         <div>
-                          <h2 className="pt-5">{element.title}</h2>
+                          <h2 className="pt-5">{element.title.length > 15 ? element.title.substring(0,12) + '...' : element.title}</h2>
                           <div className="flex gap-5">
                             <p className="font-bold">#{element.price * 100}</p>
                             {/* <p><span className='font-bold'>X</span> {count}</p> */}
