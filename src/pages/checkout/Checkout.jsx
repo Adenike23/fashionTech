@@ -283,7 +283,7 @@ const Checkout = () => {
                           </div>
                           <button
                             onClick={() => removeItem(element.id)}
-                            className="bg-red-500 p-3 mt-6 rounded text-white"
+                            className="bg-gray-400 p-3 mt-6 rounded text-white"
                           >
                             Remove item
                           </button>
