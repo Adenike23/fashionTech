@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { BsCart2 } from 'react-icons/bs'
 import image5 from '../../assets/images/man.webp'
 import Navbar from '../../components/navbar/Navbar'
+import CartContext from '../../context/CartContext'
 
 const Electronics = () => {
+    const cartCtx = useContext(CartContext)
     const [electronics, setElectronics] = useState([])
     const [loading, setLoading] = useState(true)
     const [added, setAdded] = useState(false)
@@ -13,23 +15,14 @@ const Electronics = () => {
         setElectronics(data)
         if(response) setLoading(false)
     }
-    console.log(electronics);
+    // console.log(electronics);
     useEffect(() => {
         getElectronics()
     }, [])
    
-
-    const addedItems = JSON.parse(localStorage.getItem('cart')) || []
-
-    const handleBookmarkClick = (id) => {
-        const ItemsBookmark = electronics.find(Items => Items.id === +id) 
-        addedItems.push(ItemsBookmark)
-          setAdded(true)  
-          setTimeout(() => {
-              setAdded(false)
-          }, 2000);
-          localStorage.setItem('cart', JSON.stringify(addedItems))
-    }
+    const handleAddToCart = (electronic) => {
+        cartCtx.addItem(electronic)
+      }
 
   return (
     <div className='text bg-white text-black'>
@@ -41,13 +34,13 @@ const Electronics = () => {
         </div>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-5 px-10 mt-[4rem]">
-            {electronics.map(electronic => (
-                <div className='rounded-lg p-3 h-[80%] md:h-[90%]'>
+            {electronics.map((electronic, index) => (
+                <div key={index} className='rounded-lg p-3 h-[80%] md:h-[90%]'>
                 <img src={electronic.image} alt="" className='rounded-lg cursor-pointer w-[100%] h-[90%] md:h-[80%]'/>
                     <h2 className="pt-5">{electronic.title}</h2>
                     <div className="flex justify-between pt-5 md:pt-2">
                     <p className='font-bold'>#{electronic.price * 100}</p>
-                       <div  onClick={() => handleBookmarkClick(electronic.id)} className='bg-purple-900 px-4 py-2 rounded flex items-center gap-2 cursor-pointer hover:scale-110 duration-700'>
+                       <div  onClick={() => handleAddToCart(electronic)} className='bg-purple-900 px-4 py-2 rounded flex items-center gap-2 cursor-pointer hover:scale-110 duration-700'>
                        <BsCart2 className='text-white'/><p className='text-white'>Add to Cart</p>
                        </div>
                     </div>

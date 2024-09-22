@@ -8,10 +8,11 @@ import Jewelery from './pages/jewelery/Jewelery'
 import MensClothing from './pages/mensClothing/MensClothing'
 import WomensClothing from './pages/womensClothing/WomensClothing'
 import Checkout from './pages/checkout/Checkout'
+import { CartContextProvider } from './context/CartContext'
 
 function App() {
   return (
-    <>
+    <CartContextProvider>
       <Router>
         <Navbar/>
         <Routes>
@@ -21,10 +22,11 @@ function App() {
           <Route path='/mensClothing' element={<MensClothing/>}/>
           <Route path='/womensClothing' element={<WomensClothing/>}/>
           <Route path='/checkout' element={<Checkout/>}/>
+          <Route path='*' element={<Error />} />
         </Routes>
         <Footer/>
       </Router>
-    </>
+    </CartContextProvider>
   )
 }
 

@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { BsCart2 } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import image5 from "../../assets/images/man.webp";
 import Navbar from "../../components/navbar/Navbar";
-import Checkout from "../checkout/Checkout";
+import CartContext from "../../context/CartContext";
 
 const WomensClothing = () => {
+  const cartCtx = useContext(CartContext)
   const [womensClothings, setWomensClothings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [added, setAdded] = useState(false);
@@ -24,19 +25,10 @@ const WomensClothing = () => {
     getWomensClothings();
   }, []);
 
-  const addedItems = JSON.parse(localStorage.getItem("cart")) || [];
-
-  const handleBookmarkClick = (id) => {
-    const ItemsBookmark = womensClothings.find((Items) => Items.id === +id);
-    addedItems.push(ItemsBookmark);
-    setAdded(true);
-    setTimeout(() => {
-      setAdded(false);
-    }, 2000);
-    localStorage.setItem("cart", JSON.stringify(addedItems));
-    // location.reload()
-  };
-
+  const handleAddToCart = (womensCloth) => {
+    cartCtx.addItem(womensCloth)
+  }
+  
   return (
     <div className="text min-h-[100vh] bg-white text-black">
       <Navbar />
@@ -63,8 +55,8 @@ const WomensClothing = () => {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-5 px-10 mt-[4rem]">
-        {womensClothings.map((womensCloth) => (
-          <div className="rounded-lg p-3 h-[90%]">
+        {womensClothings.map((womensCloth, index) => (
+          <div key={index} className="rounded-lg p-3 h-[90%]">
             <img
               src={womensCloth.image}
               alt=""
@@ -74,7 +66,7 @@ const WomensClothing = () => {
             <div className="flex justify-between items-center pt-4">
               <p className="font-bold">#{womensCloth.price * 100}</p>
               <div
-                onClick={() => handleBookmarkClick(womensCloth.id)}
+                onClick={() => handleAddToCart(womensCloth)}
                 className="bg-purple-900 px-4 py-2 rounded flex items-center gap-2 cursor-pointer hover:scale-110 duration-700"
               >
                 <BsCart2 className="text-white" />

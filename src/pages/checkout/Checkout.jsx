@@ -1,26 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import image from "../../assets/images/cash-on-delivery (1).png";
 import PaystackPop from "@paystack/inline-js";
-import Navbar from "../../components/navbar/Navbar";
+import CartContext from "../../context/CartContext";
+import { CurrencyFormatter } from "../../components/CurrencyFormatter";
 
 const Checkout = () => {
   const navigate = useNavigate();
   // const [emoney, setEmoney] = useState(false)
   // const [cash, setCash] = useState(false)
   const [input, setInput] = useState("");
-  const [checkout, setCheckout] = useState(false);
   const [error, setError] = useState(false);
-  const [uniqueArray, setUniqueArray] = useState([]);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
-  // const [amount, setAmount] = useState('')
-  const [city, setCity] = useState("");
-  const [country, setCountry] = useState("");
+  const [values, setValues] = useState({
+    name: '',
+    email: '',
+    phoneNumber: '',
+    address: '',
+    city: '',
+    country: '',
+  })
 
-  const emailRegEx = /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,}$/gm;
+  const cartCtx = useContext(CartContext)
+  
+  const handleInputChange = (identifier, value) => {
+    setValues(prevValues => ({
+      ...prevValues,
+      [identifier]: value
+    }))
+  }
+
+  const totalPrice = cartCtx.items.reduce((total, item) => total + item.price * item.quantity, 0);
+  const amount = `${+totalPrice * 100 + 1200 + 1690}`
 
   // const payOnDelivery = () =>{
   //     // alert('Your order is being processed!')
@@ -35,12 +45,12 @@ const Checkout = () => {
   const payWithPaystack = (e) => {
     e.preventDefault();
     if (
-      name.trim() === "" ||
-      email.trim() === "" ||
-      phoneNumber.trim() === "" ||
-      address.trim() === "" ||
-      city.trim() === "" ||
-      country.trim() === ""
+      values.name.trim() === "" ||
+      values.email.trim() === "" ||
+      values.phoneNumber.trim() === "" ||
+      values.address.trim() === "" ||
+      values.city.trim() === "" ||
+      values.country.trim() === ""
     ) {
       setError("Please fill out all fields");
       setTimeout(() => {
@@ -50,13 +60,13 @@ const Checkout = () => {
       const paystack = new PaystackPop();
       paystack.newTransaction({
         key: "pk_test_ffe006deaf4e9dd01c7d2bc258f09e3e5c5cacfd",
-        name,
-        email,
-        phoneNumber,
-        address,
+        name: values.name,
+        email: values.email,
+        phoneNumber: values.phoneNumber,
+        address: values.address,
         amount: amount * 100,
-        city,
-        country,
+        city: values.city,
+        country: values.country,
         onSuccess(transaction) {
           let message = `Payment complete! Reference ${transaction.reference}`;
           alert(message);
@@ -88,44 +98,17 @@ const Checkout = () => {
   //     })
   // }
 
-  // const decrement = () => {
-  //     setCount(count - 1)
-  // }
-  // const handleSubmit = () => {
-  //     if(input.trim() === ''){
-  //         setError('Please fill out all fields')
-  //     }
-  // }
-  const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
-  const uniqueObjects = new Set(cartItems);
-  cartItems &&
-    cartItems.forEach((obj) => {
-      // console.log(obj);
-      // Check if the object's ID is not already in the set
-      if (!uniqueObjects.has(obj.id)) {
-        // console.log(uniqueArray);
-        uniqueObjects.add(obj.id); // Add the ID to the set
-        uniqueArray.push(obj); // Add the object to the unique array
-      }
-    });
+  const handleAddItem = (item) => {
+    cartCtx.addItem(item)
+  }
 
-  const removeItem = (id) => {
-    let index = uniqueArray.findIndex((movie) => movie.id === id);
-    uniqueArray.splice(index, 1);
-    localStorage.setItem("cart", JSON.stringify(uniqueArray));
-    location.reload();
-  };
-  const totalPrice = uniqueArray.reduce((total, item) => total + item.price, 0);
-  const [amount, setAmount] = useState(`${+totalPrice * 100 + 1200 + 1690}`);
+  const handleRemoveItem = (id) => {
+    cartCtx.removeItem(id)
+  }
 
   return (
     <div className="text min-h-[100vh] pt-[5rem] bg-white text-black">
-      <Navbar uniqueArray={uniqueArray} />
-      {/* {checkout &&  <div className="alert bg-purple-800 text-white w-[50%] sticky top-20 left-[50%] -translate-x-[50%]">
-            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            <span>Your order is being processed!</span>
-        </div>} */}
-      {uniqueArray.length === 0 ? (
+      {cartCtx.items.length === 0 ? (
         <div className="absolute top-[35%] left-[50%] -translate-x-[50%]">
           <p className="font-bold text-2xl">
             Your Cart is empty, Go back to shop some items...
@@ -157,7 +140,7 @@ const Checkout = () => {
                     <label htmlFor="name">Name</label>
                     <input
                       type="text"
-                      onChange={(e) => setName(e.target.value)}
+                      onChange={(e) => handleInputChange('name', e.target.value)}
                       name=""
                       id=""
                       className="block border p-2 rounded bg-white"
@@ -166,10 +149,10 @@ const Checkout = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="name">Email</label>
+                    <label htmlFor="email">Email</label>
                     <input
                       type="email"
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
                       name=""
                       id=""
                       className="block border p-2 rounded bg-white"
@@ -181,7 +164,7 @@ const Checkout = () => {
                 <label htmlFor="phoneNumber">Phone Number</label>
                 <input
                   type="number"
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  onChange={(e) => handleInputChange('phoneNumber', e.target.value)}
                   name=""
                   id=""
                   className="block border p-2 rounded bg-white"
@@ -193,7 +176,7 @@ const Checkout = () => {
                 <label htmlFor="address">Address</label>
                 <input
                   type="text"
-                  onChange={(e) => setAddress(e.target.value)}
+                  onChange={(e) => handleInputChange('address', e.target.value)}
                   name=""
                   id=""
                   className="block border p-2 rounded bg-white"
@@ -203,23 +186,22 @@ const Checkout = () => {
 
                 <div className="flex flex-col md:flex-row gap-6 my-4">
                   <div>
-                    <label htmlFor="name">Amount</label>
+                    <label htmlFor="amount">Amount</label>
                     <input
                       type="text"
                       value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
                       name=""
                       id=""
                       className="block border p-2 rounded bg-white"
                       required
-                      placeholder="1001"
+                      readOnly
                     />
                   </div>
                   <div>
                     <label htmlFor="city">City</label>
                     <input
                       type="text"
-                      onChange={(e) => setCity(e.target.value)}
+                      onChange={(e) => handleInputChange('city', e.target.value)}
                       name=""
                       id=""
                       className="block border bg-white p-2 rounded"
@@ -231,7 +213,7 @@ const Checkout = () => {
                 <label htmlFor="country">Country</label>
                 <input
                   type="text"
-                  onChange={(e) => setCountry(e.target.value)}
+                  onChange={(e) => handleInputChange('country', e.target.value)}
                   name=""
                   id=""
                   className="block border bg-white p-2 rounded"
@@ -265,35 +247,30 @@ const Checkout = () => {
 
             <div className="bg-gray-100 px-2 md:px-4 rounded py-10 my-2">
               <p>SUMMARY</p>
-              {uniqueArray.map((element) => (
-                <div>
+              {cartCtx.items.map((item, index) => (
+                <div key={index}>
                   <div>
                     <div className="flex rounded-lg bg-gray-200 shadow-xl p-3 items-center mt-4">
-                      <div key={element.id} className="flex gap-[.7rem]">
+                      <div className="flex gap-[.7rem]">
                         <img
-                          src={element.image}
+                          src={item.image}
                           alt=""
                           className="rounded-lg hover:scale-105 duration-1000 cursor-pointer w-[40%] md:w-[20%]"
                         />
-                        <div>
-                          <h2 className="pt-5">{element.title.length > 15 ? element.title.substring(0,12) + '...' : element.title}</h2>
+                        <div className="md:flex items-center gap-10">
+                          <div>
+                          <h2 className="pt-5">{item.title.length > 15 ? item.title.substring(0,12) + '...' : item.title}</h2>
                           <div className="flex gap-5">
-                            <p className="font-bold">#{element.price * 100}</p>
-                            {/* <p><span className='font-bold'>X</span> {count}</p> */}
+                            <p className="font-bold">{CurrencyFormatter.format(item.price * 100)}</p>
                           </div>
-                          <button
-                            onClick={() => removeItem(element.id)}
-                            className="bg-gray-400 p-3 mt-6 rounded text-white"
-                          >
-                            Remove item
-                          </button>
+                          </div>
+                          <p className="flex gap-[1rem] items-center mt-4 md:mt-0">
+                            <button onClick={() => handleRemoveItem(item.id)} className="cursor-pointer w-[1.5rem] h-[1.5rem] font-lg rounded-lg bg-zinc-400 text-white flex items-center justify-center">-</button>
+                            <span>{item.quantity}</span>
+                            <button onClick={() => handleAddItem(item)} className="cursor-pointer w-[1.5rem] h-[1.5rem] font-lg rounded-lg bg-zinc-400 text-white flex items-center justify-center">+</button>
+                        </p>
                         </div>
                       </div>
-                      {/* <div className="bg-gray-100 flex p-3 rounded">
-                                    <button onClick={() => increment(element.id)}>+</button>
-                                    <p className='px-3'>{count}</p>
-                                    <button onClick={() => decrement(element.id)}>-</button>
-                                </div> */}
                     </div>
                   </div>
                 </div>
@@ -302,20 +279,20 @@ const Checkout = () => {
               <div className="flex gap-2 justify-between mt-5">
                 <p>TOTAL</p>
 
-                <h1 className="font-bold">#{totalPrice * 100}</h1>
+                <h1 className="font-bold">{CurrencyFormatter.format(totalPrice * 100)}</h1>
               </div>
               <div className="flex gap-2 justify-between my-3">
                 <p>SHIPPING</p>
-                <h1 className="font-bold">#1,200</h1>
+                <h1 className="font-bold">{CurrencyFormatter.format(1200)}</h1>
               </div>
               <div className="flex gap-2 justify-between">
                 <p>VAT (INCLUDED)</p>
-                <h1 className="font-bold">#1,690</h1>
+                <h1 className="font-bold">{CurrencyFormatter.format(1690)}</h1>
               </div>
               <div className="flex gap-2 justify-between my-10">
                 <p> GRAND TOTAL</p>
                 <h1 className="font-bold text-purple-800">
-                  #{+totalPrice * 100 + 1200.0 + 1690.0}
+                  {CurrencyFormatter.format(+totalPrice * 100 + 1200.0 + 1690.0)}
                 </h1>
               </div>
 

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { BsCart2 } from "react-icons/bs";
 import image5 from "../../assets/images/man.webp";
 import Navbar from "../../components/navbar/Navbar";
+import CartContext from "../../context/CartContext";
 
 const Jewelery = () => {
   const [jewelery, setJewelery] = useState([]);
+  const cartCtx = useContext(CartContext)
   const [loading, setLoading] = useState(true);
   const [added, setAdded] = useState(false);
   const getJewelery = async () => {
@@ -15,23 +17,16 @@ const Jewelery = () => {
     setJewelery(data);
     if (response) setLoading(false);
   };
-  console.log(jewelery);
+  // console.log(jewelery);
   useEffect(() => {
     getJewelery();
   }, []);
 
-  const addedItems = JSON.parse(localStorage.getItem("cart")) || [];
-
-  const handleBookmarkClick = (id) => {
-    const ItemsBookmark = jewelery.find((Items) => Items.id === +id);
-    addedItems.push(ItemsBookmark);
-    setAdded(true);
-    setTimeout(() => {
-      setAdded(false);
-    }, 2000);
-    localStorage.setItem("cart", JSON.stringify(addedItems));
-  };
-
+  const handleAddToCart = (eachJewelery) => {
+    cartCtx.addItem(eachJewelery)
+  }
+  // console.log('cartCtx:', cartCtx);
+  
   return (
     <div className="text bg-white text-black">
       <Navbar />
@@ -58,8 +53,8 @@ const Jewelery = () => {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-10 pt-5 mt-[4rem]">
-        {jewelery.map((eachJewelery) => (
-          <div className="rounded-lg p-3 h-[80%] md:h-[70%]">
+        {jewelery.map((eachJewelery, index) => (
+          <div key={index} className="rounded-lg p-3 h-[80%] md:h-[70%]">
             <img
               src={eachJewelery.image}
               alt=""
@@ -69,7 +64,7 @@ const Jewelery = () => {
             <div className="flex justify-between items-center py-4">
               <p className="font-bold">#{eachJewelery.price * 100}</p>
               <div
-                onClick={() => handleBookmarkClick(eachJewelery.id)}
+                onClick={() => handleAddToCart(eachJewelery)}
                 className="bg-purple-900 px-4 py-2 rounded flex items-center gap-2 cursor-pointer hover:scale-110 duration-700"
               >
                 <BsCart2 className="text-white" />

@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { BsCart2 } from "react-icons/bs";
 import image5 from "../../assets/images/man.webp";
 import Navbar from "../../components/navbar/Navbar";
+import CartContext from "../../context/CartContext";
 
 const MensClothing = () => {
+  const cartCtx = useContext(CartContext)
   const [mensClothings, setMensClothings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [added, setAdded] = useState(false);
@@ -15,23 +17,15 @@ const MensClothing = () => {
     setMensClothings(data);
     if (response) setLoading(false);
   };
-  console.log(mensClothings);
+  // console.log(mensClothings);
   useEffect(() => {
     getMensClothings();
   }, []);
 
-  const addedItems = JSON.parse(localStorage.getItem("cart")) || [];
-
-  const handleBookmarkClick = (id) => {
-    const ItemsBookmark = mensClothings.find((Items) => Items.id === +id);
-    addedItems.push(ItemsBookmark);
-    setAdded(true);
-    setTimeout(() => {
-      setAdded(false);
-    }, 2000);
-    localStorage.setItem("cart", JSON.stringify(addedItems));
-  };
-
+  const handleAddToCart = (mensCloth) => {
+    cartCtx.addItem(mensCloth)
+  }
+ 
   return (
     <div className="text bg-white text-black">
       <Navbar />
@@ -58,9 +52,9 @@ const MensClothing = () => {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-5 px-10 mt-[4rem]">
-        {mensClothings.map((mensCloth) => (
+        {mensClothings.map((mensCloth, index) => (
           <div
-            onClick={() => navigate(`/moviedetails/${mensCloth.id}`)}
+            key={index}
             className="rounded-lg p-3 h-[90%]"
           >
             <img
@@ -72,7 +66,7 @@ const MensClothing = () => {
             <div className="flex justify-between items-center py-4">
               <p className="font-bold">#{mensCloth.price * 100}</p>
               <div
-                onClick={() => handleBookmarkClick(mensCloth.id)}
+                onClick={() => handleAddToCart(mensCloth)}
                 className="bg-purple-900 px-4 py-2 rounded flex items-center gap-2 cursor-pointer hover:scale-110 duration-700"
               >
                 <BsCart2 className="text-white" />
