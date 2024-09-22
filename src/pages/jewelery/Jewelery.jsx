@@ -29,7 +29,6 @@ const Jewelery = () => {
   
   return (
     <div className="text bg-white text-black">
-      <Navbar />
       {loading && (
         <span className="loading loading-spinner loading-lg absolute top-[20%] left-[50%] -translate-x-[50%]"></span>
       )}

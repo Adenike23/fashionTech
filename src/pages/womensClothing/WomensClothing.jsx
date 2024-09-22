@@ -31,7 +31,6 @@ const WomensClothing = () => {
   
   return (
     <div className="text min-h-[100vh] bg-white text-black">
-      <Navbar />
       {loading && (
         <span className="loading loading-spinner loading-lg absolute top-[20%] left-[50%] -translate-x-[50%]"></span>
       )}
