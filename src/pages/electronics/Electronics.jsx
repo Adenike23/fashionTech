@@ -1,31 +1,47 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { BsCart2 } from 'react-icons/bs'
 import image5 from '../../assets/images/man.webp'
-import Navbar from '../../components/navbar/Navbar'
 import CartContext from '../../context/CartContext'
+import { motion } from 'framer-motion'
 
 const Electronics = () => {
     const cartCtx = useContext(CartContext)
     const [electronics, setElectronics] = useState([])
     const [loading, setLoading] = useState(true)
     const [added, setAdded] = useState(false)
+
     const getElectronics = async() => {
         const response = await fetch('https://fakestoreapi.com/products/category/electronics')
         const data = await response.json()
         setElectronics(data)
         if(response) setLoading(false)
     }
-    // console.log(electronics);
     useEffect(() => {
         getElectronics()
     }, [])
+
+    // useEffect(() => {
+    //     fetchElectronics().then(data => {
+    //         setElectronicsData(data)
+    //     }).catch(error => {
+    //         console.error('Error fetching electronics', error);
+            
+    //     })
+    // }, [fetchElectronics])
+    // console.log('electronicsData', electronicsData);
+    
    
     const handleAddToCart = (electronic) => {
         cartCtx.addItem(electronic)
       }
 
   return (
-    <div className='text bg-white text-black'>
+    <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2, duration: 1.5 }} 
+        exit={{x: '-100vw', transition: 'easeInOut'}} 
+        className='text bg-white text-black'>
         {loading && <span className="loading loading-spinner loading-lg absolute top-[20%] left-[50%] -translate-x-[50%]"></span>}
         {added &&  <div className="alert bg-purple-800 text-white w-[50%] sticky top-20 left-[50%] -translate-x-[50%]">
         <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -54,7 +70,7 @@ const Electronics = () => {
             </div>
             <img src={image5} alt="" className='w-[80%] sm:w-[50%] mt-5 md:w-[45%] lg:w-[35%]'/>
         </div>
-    </div>
+    </motion.div>
   )
 }
 

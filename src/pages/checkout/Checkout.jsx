@@ -4,6 +4,7 @@ import image from "../../assets/images/cash-on-delivery (1).png";
 import PaystackPop from "@paystack/inline-js";
 import CartContext from "../../context/CartContext";
 import { CurrencyFormatter } from "../../components/CurrencyFormatter";
+import { motion } from "framer-motion";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -107,7 +108,12 @@ const Checkout = () => {
   }
 
   return (
-    <div className="text min-h-[100vh] pt-[5rem] bg-white text-black">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.2, duration: 1.5 }} 
+      exit={{y: '-100vh', transition: 'easeInOut'}}
+      className="text min-h-[100vh] pt-[5rem] bg-white text-black">
       {cartCtx.items.length === 0 ? (
         <div className="absolute top-[35%] left-[50%] -translate-x-[50%]">
           <p className="font-bold text-2xl">
@@ -306,7 +312,7 @@ const Checkout = () => {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

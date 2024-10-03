@@ -6,8 +6,10 @@ import image5 from "../../assets/images/man.webp";
 import image6 from "../../assets/images/womensClothing.jpg";
 import { BsArrowRight } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { easeInOut } from "framer-motion/dom";
 AOS.init();
 
 const Home = () => {
@@ -64,7 +66,13 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="text bg-white md:pt-[5rem]">
+    <motion.div 
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ delay: 0.2, duration: 1.5 }} 
+    exit={{x: '-100vw', transition: 'easeInOut'}}
+    className="text bg-white md:pt-[5rem] mt-[3rem]"
+    >
       {loading && (
         <span className="loading loading-spinner loading-lg absolute top-[20%] left-[50%] -translate-x-[50%]"></span>
       )}
@@ -342,7 +350,7 @@ const Home = () => {
           className="w-[80%] mt-5 md:w-[45%] lg:w-[35%]"
         />
       </div>
-    </div>
+    </motion.div>
   );
 };
 

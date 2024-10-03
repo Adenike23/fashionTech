@@ -2,8 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { BsCart2 } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import image5 from "../../assets/images/man.webp";
-import Navbar from "../../components/navbar/Navbar";
 import CartContext from "../../context/CartContext";
+import {motion} from 'framer-motion'
 
 const WomensClothing = () => {
   const cartCtx = useContext(CartContext)
@@ -30,7 +30,12 @@ const WomensClothing = () => {
   }
   
   return (
-    <div className="text min-h-[100vh] bg-white text-black">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.2, duration: 1.5 }} 
+      exit={{x: '-100vw', transition: 'easeInOut'}}
+    className="text min-h-[100vh] bg-white text-black">
       {loading && (
         <span className="loading loading-spinner loading-lg absolute top-[20%] left-[50%] -translate-x-[50%]"></span>
       )}
@@ -100,7 +105,7 @@ const WomensClothing = () => {
           className="w-[80%] mt-5 md:w-[45%] lg:w-[35%]"
         />
       </div>
-    </div>
+    </motion.div>
   );
 };
 

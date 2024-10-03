@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { BsCart2 } from "react-icons/bs";
 import image5 from "../../assets/images/man.webp";
-import Navbar from "../../components/navbar/Navbar";
 import CartContext from "../../context/CartContext";
+import { motion } from "framer-motion";
 
 const Jewelery = () => {
   const [jewelery, setJewelery] = useState([]);
@@ -28,7 +28,12 @@ const Jewelery = () => {
   // console.log('cartCtx:', cartCtx);
   
   return (
-    <div className="text bg-white text-black">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.2, duration: 1.5 }} 
+      exit={{x: '-100vw', transition: 'easeInOut'}} 
+      className="text bg-white text-black">
       {loading && (
         <span className="loading loading-spinner loading-lg absolute top-[20%] left-[50%] -translate-x-[50%]"></span>
       )}
@@ -98,7 +103,7 @@ const Jewelery = () => {
           className="w-[80%] sm:w-[50%] mt-5 md:w-[45%] lg:w-[35%]"
         />
       </div>
-    </div>
+    </motion.div>
   );
 };
 
